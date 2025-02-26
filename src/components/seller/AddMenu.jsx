@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import Navbar from "./Navbar";
-import Footer from './Footer'
+import Navbar from "../../layouts/Navbar";
+import Footer from "../../layouts/Footer";
 export default function FoodHub() {
   
   const [itemName, setItemName] = useState("");

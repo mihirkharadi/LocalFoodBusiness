@@ -1,12 +1,79 @@
 import React, { useState } from "react";
+import { auth,db } from "../firebaseConfig";
+import { setDoc,doc } from "firebase/firestore";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const SignupForm = () => {
-  const [role, setRole] = useState("Seller");
+
+  
   const [agree, setAgree] = useState(false);
+  const[data,setData]=useState(
+    {
+      email:"",
+      password:"",
+      fullName:"",
+     role:"",
+    }
+  )
+  const navigate=useNavigate();
+  const handleChange=(e)=>
+  {
+    const{name,value}=e.target;
+    setData({...data,[name]:value});
+  }
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+
+   
+
+
+    try {
+      if (!data.fullName) return toast.error("Enter your name", { position: "top-left",
+        autoClose:2000 ,
+        style:{width:"200px",height:"50px",fontSize:"12px"}});
+      if (!agree) return toast.error("You must agree to the Terms & Conditions", { position: "top-left",
+        autoClose:2000 ,
+        style:{width:"200px",height:"50px",fontSize:"12px"}});
+      const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
+      const token = await userCredential.user.getIdToken(); 
+        const user=auth.currentUser;
+     if(user)
+     {
+      await setDoc(doc(db,"users",user.uid ) ,
+    {
+      email:user.email,
+      fullName:data.fullName,
+      role:data.role,
+    });
+     }
+      toast.success('User Registered Successfully',
+        {
+          position:'top-center',
+        }
+      )
+      
+      navigate('/login')
+    } 
+    
+    
+    catch (error) {
+            console.error("Error:", error.message);
+           toast.error(`${error.message}`,
+             {
+                  position:"top-left",
+                  autoClose:3000
+              }
+           )
+    }
+  };
 
   return (
-    <div className="flex justify-center items-center  bg-gray-200">
-      <div className="w-[350px] h-[500px] bg-black rounded-3xl shadow-2xl border-8 border-black relative overflow-hidden">
+    <div className="grid place-items-center">
+      <div className="w-[350px] h-[550px] bg-black rounded-3xl shadow-2xl border-8 border-black relative overflow-hidden">
      
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-5 bg-black rounded-b-3xl"></div>
 
@@ -19,18 +86,32 @@ const SignupForm = () => {
           </p>
 
           <form className="mt-4 space-y-4">
+
             <input
               type="text"
+              name="fullName"
+              id="fullName"
+              required
               placeholder="Full Name"
+              onChange={handleChange}
+              value={data.fullName}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <input
               type="email"
+              name="email"
+              required
+              value={data.email}
+              onChange={handleChange}
               placeholder="Email Address"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <input
               type="password"
+              name="password"
+              required
+              onChange={handleChange}
+              value={data.password}
               placeholder="Password"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -41,9 +122,10 @@ const SignupForm = () => {
                 <input
                   type="radio"
                   name="role"
-                  value="Buyer"
-                  checked={role === "Buyer"}
-                  onChange={() => setRole("Buyer")}
+                  value="buyer"
+                  
+                  
+                  onChange={handleChange}
                   className="accent-blue-500"
                 />
                 <span>Buyer</span>
@@ -52,9 +134,9 @@ const SignupForm = () => {
                 <input
                   type="radio"
                   name="role"
-                  value="Seller"
-                  checked={role === "Seller"}
-                  onChange={() => setRole("Seller")}
+                  value="seller"
+                 
+                  onChange={handleChange}
                   className="accent-blue-500"
                 />
                 <span>Seller</span>
@@ -66,6 +148,8 @@ const SignupForm = () => {
               <input
                 type="checkbox"
                 checked={agree}
+                required
+            
                 onChange={() => setAgree(!agree)}
                 className="accent-blue-500"
               />
@@ -81,7 +165,8 @@ const SignupForm = () => {
 
            
             <button
-              type="submit"
+            
+              onClick={handleSignup}
               className="w-full bg-black text-white font-semibold py-3 rounded-lg mt-2 shadow-md hover:opacity-90 transition"
             >
               Sign Up

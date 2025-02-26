@@ -1,6 +1,20 @@
 import React from "react";
-
+import { useNavigate } from "react-router-dom";
 const FoodMarketplace = () => {
+const navigate=useNavigate();
+
+
+const handleLogin=()=>
+{
+  navigate('/login')
+  
+}
+
+const handleSignUp=()=>
+{
+  navigate("/signup")
+}
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-200">
       <div className="w-[320px] h-[640px] bg-black rounded-3xl shadow-2xl border-8 border-black relative overflow-hidden">
@@ -28,11 +42,11 @@ const FoodMarketplace = () => {
 
       
           <div className="flex flex-col items-center gap-3 px-6">
-            <button className="w-full bg-red-500 text-white font-semibold py-3 rounded-xl shadow-md">
+            <button onClick={handleSignUp} className="w-full bg-red-500 text-white font-semibold py-3 rounded-xl shadow-md">
               Join us
             </button>
-            <button className="w-full border border-gray-300 text-black font-semibold py-3 rounded-xl shadow-md">
-              Sign Up
+            <button onClick={handleLogin} className="w-full border border-gray-300 text-black font-semibold py-3 rounded-xl shadow-md">
+             login
             </button>
           </div>
         </div>
