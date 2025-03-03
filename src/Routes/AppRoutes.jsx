@@ -5,7 +5,8 @@ import AddMenu from "../components/seller/AddMenu.jsx"
 import Dashboard from "../components/seller/Dashboard.jsx"
 import SignupPage from '../pages/SignUpPage.jsx'
 import LoginPage from '../pages/LoginPage.jsx'
-
+import Profile from "../components/seller/Profile.jsx"
+import RegisterKitchen from "../components/seller/RegisterKitchen.jsx"
 
 export  const AppRoutes=()=>
 {
@@ -18,6 +19,8 @@ export  const AppRoutes=()=>
             <Route path="/sellerDashboard" element={<Dashboard/>}/>
             <Route path="/myOrder" element={<MyOrder/>}/>
             <Route path="/addMenu" element={<AddMenu/>}/>
+            <Route path="/profile" element={<Profile/>}/>
+            <Route path="/addKitchen" element={<RegisterKitchen/>}/>
 
 
         </Routes>

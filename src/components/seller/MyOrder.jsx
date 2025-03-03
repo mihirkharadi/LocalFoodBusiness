@@ -2,6 +2,7 @@ import { useState } from "react";
 import Footer from "../../layouts/Footer";
 import Navbar from "../../layouts/Navbar"
 
+
 const orders = [
   {
     id: 1234,
@@ -63,10 +64,16 @@ export default function Orders() {
                 </span>
                 <p className="text-gray-600 mt-2">{order.items}</p>
                 <p className="text-gray-400 text-sm">{order.time}</p>
+                <p className="text-blue-300 bg-black w-20 rounded-full p-1
+                text-center mt-3">Chat</p>
               </div>
               <p className="text-lg font-bold">{order.total}</p>
+           
+    
             </div>
+            
           ))}
+          
         </div>
       </div>
 

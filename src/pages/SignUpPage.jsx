@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { auth,db } from "../firebaseConfig";
 import { setDoc,doc } from "firebase/firestore";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -32,15 +32,18 @@ const SignupForm = () => {
 
 
     try {
-      if (!data.fullName) return toast.error("Enter your name", { position: "top-left",
+      if (!data.email || !data.password || !data.fullName) return toast.error("All fields are required!", { position: "top-left",
         autoClose:2000 ,
         style:{width:"200px",height:"50px",fontSize:"12px"}});
+
+
       if (!agree) return toast.error("You must agree to the Terms & Conditions", { position: "top-left",
         autoClose:2000 ,
         style:{width:"200px",height:"50px",fontSize:"12px"}});
       const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
       const token = await userCredential.user.getIdToken(); 
         const user=auth.currentUser;
+        await sendEmailVerification(user);
      if(user)
      {
       await setDoc(doc(db,"users",user.uid ) ,
@@ -50,7 +53,7 @@ const SignupForm = () => {
       role:data.role,
     });
      }
-      toast.success('User Registered Successfully',
+      toast.success('User Registered Successfully pls verify your email',
         {
           position:'top-center',
         }
