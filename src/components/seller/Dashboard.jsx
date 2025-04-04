@@ -1,41 +1,85 @@
 import Navbar from "../../layouts/Navbar";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Footer from "../../layouts/Footer";
-const foodItems = [
-  { name: "Margherita Pizza", desc: "Fresh tomatoes, mozzarella", img: "src/assets/Margherita.webp" },
-  { name: "Classic Burger", desc: " lettuce, cheese", img: "src/assets/burger.jpg" },
-  { name: "Margherita Pizza", desc: "Fresh tomatoes, mozzarella", img: "src/assets/Margherita.webp" },
-  { name: "Margherita Pizza", desc: "Fresh tomatoes, mozzarella", img: "src/assets/Margherita.webp" },
-  { name: "Margherita Pizza", desc: "Fresh tomatoes, mozzarella", img: "src/assets/Margherita.webp" },
-];
+import { db } from "../../firebaseConfig";
+import { auth } from "../../firebaseConfig";
+import { collection, getDocs, onSnapshot } from "firebase/firestore";
+import { toast } from "react-toastify";
+
 
 export default function FoodHub() {
-    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [menuData, setMenuData] = useState(false);
+    const[menuList,setMenuList]=useState([]);
    
-  return (
-    <div className="min-h-screen bg-gray-100">
+const getMenuList=()=>
+{
+  const kitchenId=auth.currentUser?.uid;
+  console.log("Kitchen ID:", kitchenId);
+  if(!kitchenId) return ;
+  
+
+  try {
     
+   const unsubscribe= onSnapshot(collection(db,"kitchens",kitchenId,"menu"),
+  (snapshot)=>
+  {
+    const menuList = snapshot.docs.map(doc => ({
+      id: doc.id,      
+      ...doc.data()    
+  
+ 
+    
+}));
+setMenuData(menuList);
+},(error)=>
+{
+  toast.error(`${error.message}`, { position: "top-center", autoClose: 2000 });
+});
+return ()=> unsubscribe();
+
+
+        
+  
+ 
+  
+  } catch (error) {
+    toast.error(`${error}`,{position:"top-center" ,autoClose:2000 })
+  }
+}
+useEffect(()=>
+{
+  getMenuList();
+
+},[])
+
+  return (
+    <div className="min-h-screen bg-[#FFA500] text-white">
+
+
     <Navbar/>
       
     
-      <div className="p-4 text-center items-center flex flex-col">
-        <h2 className="text-2xl font-bold">Today's Menu</h2>
-        <p className="text-gray-500">Fresh and delicious dishes for today</p>
-      
+    <div className="p-4 text-center">
+  <h2 className="text-3xl font-bold text-white">Today's Menu</h2>
+  <p className="text-white">Fresh and delicious dishes for today</p>
+</div>
+
+<div className="grid place-items-center gap-6 m-4 w-auto max-h-[65vh] overflow-y-auto no-scrollbar grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+  {menuData.length > 0 ? (
+    menuData.map((cur) => (
+      <div key={cur.id} className=" p-4 rounded-xl shadow-lg w-64 hover:shadow-2xl transition-shadow bg-[#FFFFFF]">
+        <img src={cur.image} alt={cur.itemName} className="w-full h-40 object-cover rounded-lg" />
+        <h3 className="font-semibold mt-3 text-lg text-gray-900">{cur.itemName}</h3>
+        <p className="text-gray-600 text-sm mt-1">{cur.description}</p>
       </div>
-      
-     
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  lg:grid-cols-4  place-items-center gap-4 m-2 w-auto  max-h-[70vh] overflow-y-auto no-scrollbar">
-        {foodItems.map((food, index) => (
-          <div key={index} className="bg-white p-2 rounded-lg shadow-md w-2xs">
-            <img src={food.img} alt={food.name} className="w-2xs rounded-lg " />
-            <h3 className="font-semibold mt-2">{food.name}</h3>
-            <p className="text-gray-500 text-sm">{food.desc}</p>
-          </div>
-        ))}
-      </div>
+    ))
+  ) : (
+    <p className="text-center text-white w-full">Add menu for today.</p>
+  )}
+</div>
+
       
    <Footer/>
      

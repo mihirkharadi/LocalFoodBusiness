@@ -21,26 +21,47 @@ const handleLogin=async()=>
 {
   try 
   {
-    
-    const userCredential=await signInWithEmailAndPassword(auth,email,password);
-
-    const user=userCredential.user;
-
-    if(!user.emailVerified)
+    if(!email && !password)
     {
-      toast.error("Please verify your email before logging in!", { position: "top-right",style:{width:"200px",height:"50px",
+      toast.error("Please enter your credentials!", { position: "top-right",style:{width:"200px",height:"50px",
         fontSize:"12px"
-      } });
+      } ,autoClose:2000});
       return;
     }
-    console.log("User logged in successfully");
-    toast.success('User logged in Successfully',
+
+    setLoading(true);
+    const userCredential=await signInWithEmailAndPassword(auth,email,password);
+    setLoading(false);
+    const user=userCredential.user;
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+
+    if (userDoc.exists()) {
+      const { role } = userDoc.data();
+      if(!user.emailVerified)
+        {
+          toast.error("Please verify your email before logging in!", { position: "top-right",style:{width:"200px",height:"50px",
+            fontSize:"12px"
+          } });
+          return;
+        }
+        else
+        {
+          toast.success('User logged in Successfully',
             {
               position:'top-center',
               autoClose:2000
             }
           )
-    navigate('/sellerDashboard')
+     navigate(role === "seller" ? "/sellerDashboard" : "/buyerDashboard");
+
+        }
+    } else {
+      console.log("User data not found.");
+    }
+
+   
+   
+   
   } catch (error) {
     console.error(error.message);
     toast.error(' Something went wrong try again later',
@@ -92,12 +113,12 @@ const handleGoogle=async()=>
         toast.success(`Welcome back ${isUser.data().fullName}!`,
           {
             position:"bottom-right",
-            autoClose:2000,
+            autoClose:1000,
           }
         );
 
 
-        navigate(existingRole==="seller"?"/sellerDashboard" :"/profile");
+        navigate(existingRole==="seller"?"/sellerDashboard" :"/sellerDashboard");
         return;
       }
 
@@ -179,15 +200,17 @@ const saveRole=async(user,role)=>
             className="w-full p-2 border border-gray-300 rounded"
           />
           <div onClick={handleForgot} className="text-right text-sm text-gray-500 cursor-pointer">Forgot Password?</div>
-          <button onClick={handleLogin} className="w-full bg-black text-white p-2 rounded">Login</button>
+
+          {
+            loading ? <Loader/> :<button onClick={handleLogin} className="w-full bg-black text-white p-2 rounded">Login</button>
+          }
+          
           <div className="flex items-center my-4">
             <div className="flex-grow border-t border-gray-300"></div>
             <span className="mx-2 text-gray-500">OR</span>
             <div className="flex-grow border-t border-gray-300"></div>
           </div>
-          {
-            loading&&(<Loader/>)
-          }
+          
           <button onClick={handleGoogle} className="w-full flex items-center justify-center bg-white border border-gray-300 text-gray-700 p-2 rounded">
             <FcGoogle className="mr-2" /> Continue with Google
           </button>

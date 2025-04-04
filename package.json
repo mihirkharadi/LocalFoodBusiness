@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@shadcn/ui": "^0.0.4",
+    "@stripe/react-stripe-js": "^3.5.1",
+    "@stripe/stripe-js": "^6.1.0",
     "@tailwindcss/vite": "^4.0.8",
     "axios": "^1.8.1",
     "dotenv": "^16.4.7",
@@ -23,6 +25,7 @@
     "react-leaflet": "^5.0.0",
     "react-router-dom": "^7.2.0",
     "react-toastify": "^11.0.5",
+    "stripe": "^17.7.0",
     "tailwind-scrollbar-hide": "^2.0.0"
   },
   "devDependencies": {

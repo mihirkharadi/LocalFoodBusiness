@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { auth,db } from "../../firebaseConfig";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, onSnapshot, setDoc } from "firebase/firestore";
 import Navbar from "../../layouts/Navbar";
 import Footer from "../../layouts/Footer";
 import { toast } from "react-toastify";
@@ -20,26 +20,29 @@ export default function Profile() {
   
   const user = auth.currentUser;
 
+ 
+
+  
+  const fetchUserData =  () => {
+    if (!user) return;
+
+    const userDoc = doc(db, "users", user.uid);
+    const unsubscribe =  onSnapshot(userDoc,(snapshot)=>
+    {
+      if (snapshot.exists()) {
+        setUserData(snapshot.data());
+      }
+    });
+return ()=>unsubscribe();
+
+    
+    
+  };
   useEffect(() => {
     if (user) {
       fetchUserData(user.uid);
     }
   }, [user]);
-
-  
-  const fetchUserData = async () => {
-    if (!user) return;
-
-    const userDoc = doc(db, "users", user.uid);
-    const docSnap = await getDoc(userDoc);
-
-
-    if (docSnap.exists()) {
-      setUserData(docSnap.data());
-    }
-    
-  };
-
  
   const handleChange = (e) => {
     const{name,value}=e.target;
@@ -68,76 +71,99 @@ export default function Profile() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-[#FFA500]">
     <Navbar/>
-    <div className="p-4 text-center items-center flex flex-col">
-        <h2 className="text-2xl font-bold">Profile</h2>
-        <p className="text-gray-500">Update Your Details </p>
-      
-      </div>
-    <div className="max-w-md  mx-auto bg-white p-4 m-5  rounded-lg shadow-lg">
-      
-    
-      
+    <div className="max-w-md mx-auto my-5 bg-white p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 relative overflow-hidden ">
+  {/* Profile Picture */}
+  <div className="flex justify-center mb-4">
+    <div className="w-20 h-20 bg-gray-300  rounded-full flex items-center justify-center text-gray-500 text-3xl font-bold">
+      {userData.fullName ? userData.fullName.charAt(0) : "U"}
+    </div>
+  </div>
 
+  <h2 className="text-2xl font-semibold text-gray-800 dark:text-white text-center mb-4">
+    {userData.fullName || "User Name"}
+  </h2>
 
-     
+  <div className="space-y-3">
+    {/* Full Name Input */}
+    <div className="relative">
       <input
         type="text"
         name="fullName"
         value={userData.fullName}
         onChange={handleChange}
         disabled={!editMode}
-        className="w-full border rounded-md px-3 py-2 mb-3"
+        className={`w-full rounded-full px-4 py-2 border focus:outline-none ${
+          editMode ? "bg-white border-gray-300 focus:ring-2 focus:ring-blue-400" : "bg-gray-100 border-gray-200"
+        }  dark:border-gray-600 `}
         placeholder="Full Name"
       />
+    </div>
 
+    {/* Email (Disabled) */}
+    <div className="relative">
       <input
         type="email"
         name="email"
         value={userData.email}
         disabled
-        className="w-full border rounded-md px-3 py-2 mb-3 bg-gray-100"
+        className="w-full rounded-full px-4 py-2 border bg-gray-100 border-gray-200  dark:border-gray-600 "
         placeholder="Email"
       />
+    </div>
 
+    {/* Phone Number Input */}
+    <div className="relative">
       <input
         type="tel"
         name="phone"
         value={userData.phone}
         onChange={handleChange}
         disabled={!editMode}
-        className="w-full border rounded-md px-3 py-2 mb-3"
+        className={`w-full rounded-full px-4 py-2 border focus:outline-none ${
+          editMode ? "bg-white border-gray-300 focus:ring-2 focus:ring-blue-400" : "bg-gray-100 border-gray-200"
+        }  dark:border-gray-600`}
         placeholder="Phone Number"
       />
+    </div>
 
+    {/* Address Input */}
+    <div className="relative">
       <textarea
         name="address"
         value={userData.address}
         onChange={handleChange}
         disabled={!editMode}
-        className="w-full border rounded-md px-3 py-2 mb-3"
+        className={`w-full rounded-2xl px-4 py-2 border resize-none focus:outline-none ${
+          editMode ? "bg-white border-gray-300 focus:ring-2 focus:ring-blue-400" : "bg-gray-100 border-gray-200"
+        }  dark:border-gray-600 `}
         placeholder="Address"
       ></textarea>
-        
-
-     
-      {editMode ? (
-        <button
-          onClick={handleSave}
-          className="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600"
-        >
-          Save Changes
-        </button>
-      ) : (
-        <button
-          onClick={() => setEditMode(true)}
-          className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
-        >
-          Edit Profile
-        </button>
-      )}
     </div>
+  </div>
+
+  {/* Action Button */}
+  <div className="mt-5">
+    {editMode ? (
+      <button
+        onClick={handleSave}
+        className="w-full bg-green-500 text-white py-2 rounded-full hover:bg-green-600 transition font-medium"
+      >
+        Save Changes
+      </button>
+    ) : (
+      <button
+        onClick={() => setEditMode(true)}
+        className="w-full bg-blue-500 text-white py-2 rounded-full hover:bg-blue-600 transition font-medium"
+      >
+        Edit Profile
+      </button>
+    )}
+  </div>
+</div>
+
+
    
     <Footer/>
     </div>
