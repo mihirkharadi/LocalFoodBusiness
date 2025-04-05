@@ -111,11 +111,12 @@ finally
            } 
             <p className="capitalize ">{msg.text}</p>
             <p className="text-[#475569] text-right ca">
-            {msg.timeStamp.toDate().toLocaleTimeString('en-IN', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: true, 
-  })}
+            {msg.timeStamp?.toDate()?.toLocaleTimeString('en-IN', {
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: true,
+}) || ''
+}
             </p>
           </div>
         </div>

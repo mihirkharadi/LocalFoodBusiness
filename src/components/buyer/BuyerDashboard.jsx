@@ -11,7 +11,7 @@ const  BuyerDashboard=()=> {
       <BuyerNavbar/>
       <div className="relative">
         <img 
-          src="burger.jpg"
+          src="/burger.jpg"
           alt="Local Flavors"
           className="w-full h-48 object-cover p-2 rounded-xl"
         />
