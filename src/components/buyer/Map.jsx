@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, Circle, useMap } from "react-leaflet";
-import {  collection, getDocs } from "firebase/firestore";
+import {  addDoc,query,where, onSnapshot, collection, getDocs,doc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import "leaflet/dist/leaflet.css";
 import {  LocateFixed,Clock,   } from "lucide-react"; 
@@ -9,11 +9,13 @@ import { toast } from "react-toastify";
 import { FaStar } from "react-icons/fa";
 import { auth } from "../../firebaseConfig";
 
+
 import { useNavigate } from "react-router-dom";
 export default function MapComponent() {
   
      const [userLocation, setUserLocation] = useState(null);
      const [restaurants, setRestaurants] = useState([]);
+const[menuData,setMenuData]=useState([]);
      const [nearbyRestaurants, setNearbyRestaurants] = useState([]);
      const[loading,setLoading]=useState(false);
      const[isKitchenToggle,setIsKitchenToggle]=useState(false);
@@ -126,6 +128,32 @@ const navigate=useNavigate();
     return null;
   }
  
+useEffect(()=>
+  {
+    if(!userId)
+      {
+        return;
+      }
+     
+
+      const favRef=collection(db,"fav");
+    
+      
+      const q= query(favRef,where("userId","==",userId));
+  
+    
+    const unsubscribe=onSnapshot(q,(snapshot)=>
+    {
+      const cartItemIDs = snapshot.docs.map(doc =>
+        doc.data().kitchenId
+       );
+        setMenuData(cartItemIDs); 
+        console.log("User's Favorite Menus:", cartItemIDs);
+    })
+      
+        return ()=> unsubscribe();
+  },[userId])
+
   const handleKitchens=()=>
   {
    setIsKitchenToggle(true);
@@ -136,9 +164,33 @@ const navigate=useNavigate();
     navigate(`/menu/${kitchenId}`);
     
   }
-  const handleFav=(kitchenId)=>
+  const handleFav=async(kitchenId,kitchenName,kitchenRating)=>
     {
-      navigate(`/fav/${kitchenId}`);
+
+      try{
+
+    const kitchenData=await getDocs(collection(db,"kitchens",kitchenId,"menu"));
+
+    const menuList = kitchenData.docs.map(doc => ({
+      id: doc.id,      
+      ...doc.data()     
+  }));
+ await addDoc(collection(db,"fav"),
+{
+  menuList,
+  userId,
+  kitchenId,
+  kitchenName,
+  kitchenRating,
+})
+  
+
+        navigate(`/fav`);
+      }
+      catch(error){
+        console.error("Error",error);
+      }
+      
       
     }
     
@@ -148,7 +200,11 @@ const navigate=useNavigate();
         setUserLocation(JSON.parse(storedLocation));
     }
 }, []);
-    
+
+const handleGoToFav=()=>
+{
+  navigate('/fav')
+}
    
 
   
@@ -252,7 +308,12 @@ const navigate=useNavigate();
            {/* <span className="bg-green-100 text-green-700 px-3 py-1 rounded-md text-xs cursor-pointer">Available for Delivery</span> */}
            <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-md text-xs cursor-pointer">20-30 min</span>
            <span onClick={ () => handleMenu(restaurant.id) } className="bg-pink-100 px-3 py-1 rounded-md text-xs text-pink-700 cursor-pointer"> Check Menu</span>
-           <span onClick={ () =>handleFav(restaurant.id) } className="bg-pink-100 px-3 py-1 rounded-md text-xs text-pink-700 cursor-pointer"> Add to Favourite</span>
+           {
+            menuData.includes(restaurant.id) 
+            ? <span onClick={handleGoToFav} className="bg-green-100 px-3 py-1 rounded-md text-xs text-green-700 cursor-pointer"> Go to Favourites</span>
+            :<span onClick={ () =>handleFav(restaurant.id,restaurant.kitchenName,restaurant.rating) } className="bg-green-100 px-3 py-1 rounded-md text-xs text-green-700 cursor-pointer"> ♡ Add to Favourites</span>
+           }
+           
          </div>
        </div>
        </div>

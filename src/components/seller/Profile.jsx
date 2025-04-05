@@ -71,9 +71,10 @@ return ()=>unsubscribe();
   }
 
   return (
-    <div className="min-h-screen bg-[#FFA500]">
+    <>
     <Navbar/>
-    <div className="max-w-md mx-auto my-5 bg-white p-6 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 relative overflow-hidden ">
+    
+    <div className=" max-w-md mx-auto my-5 bg-white p-6  shadow-lg  border-gray-200 dark:border-gray-700 relative overflow-hidden ">
   {/* Profile Picture */}
   <div className="flex justify-center mb-4">
     <div className="w-20 h-20 bg-gray-300  rounded-full flex items-center justify-center text-gray-500 text-3xl font-bold">
@@ -166,7 +167,7 @@ return ()=>unsubscribe();
 
    
     <Footer/>
-    </div>
+    </>
     
   );
 }

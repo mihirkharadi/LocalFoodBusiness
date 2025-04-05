@@ -154,7 +154,7 @@ const handleChat=async(kitchenId,buyerId,buyerName,kitchenName)=>
 
   return (
     <>
-      <div className="min-h-screen bg-[#90CAF9] text-white ">
+      <div className="min-h-screen bg-[#FFA500] text-white ">
         <Navbar />
         <div className="mt-3">
           <h2 className="text-2xl font-bold text-center">My Orders</h2>

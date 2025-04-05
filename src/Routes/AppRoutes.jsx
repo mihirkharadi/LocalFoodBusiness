@@ -16,6 +16,7 @@ import Payment from "../components/buyer/Payment.jsx"
 import OrdersPage from "../components/buyer/Order.jsx";
 import Chat from "../components/seller/Chat.jsx";
 import BuyerChat from "../components/buyer/Chat.jsx";
+import FavMenu from "../components/buyer/Favourite.jsx";
 export  const AppRoutes=()=>
 {
     return(
@@ -37,6 +38,7 @@ export  const AppRoutes=()=>
             <Route path="/cart" element={<Cart/>} />
             <Route path="/payment" element={<Payment/>} />
             <Route path="/order" element={<OrdersPage/>} />
+            <Route path="/fav" element={<FavMenu/>}/>
             <Route path="/chat/:kitchenId/:buyerId/:chatId/:buyerName/:kitchenName" element={<Chat/>} />
             <Route path="/buyerChat/:kitchenId/:buyerId/:chatId/:buyerName/:kitchenName" element={<BuyerChat/>} />
         </Routes>

@@ -36,6 +36,7 @@ export default function Profile() {
   )
 
 const user = auth.currentUser;
+const userId=auth.currentUser?.uid;
 
 const handleLocationData=(data)=>
 {
@@ -97,6 +98,7 @@ const handleEdit=()=>
       setLoader(true);
       await setDoc(doc(db,"kitchens",user.uid),
       {
+        id:userId,
         fullName:userData.fullName,
        kitchenName:userData.kitchenName,
         phone:userData.phone,
@@ -133,6 +135,7 @@ const handleEdit=()=>
       setLoader(true);
       await updateDoc(doc(db,"kitchens",user.uid),
       {
+        id:userId,
         fullName:userData.fullName,
        kitchenName:userData.kitchenName,
         phone:userData.phone,

@@ -89,21 +89,34 @@ finally
     <BuyerNavbar />
     <div className=" max-h-[80vh] bg-[#FFA500] text-white flex flex-col">
   
-  <div className="flex-1 flex flex-col w-full bg-white">
+  <div className="flex-1  flex flex-col w-full bg-white">
     {/* Buyer Info */}
-    <div className="p-4 border-b text-lg text-green-600 font-semibold flex gap-2 items-center">
-      <FaUserCircle className="text-gray-500" size={25} /> {kitchenName} (vendor)
+    <div className="p-4 border-t text-lg bg-[#111827] text-[#FFFFFF] font-semibold flex gap-2 items-center">
+      <FaUserCircle className="text-[#10B981]" size={25} /> {kitchenName} (vendor)
     </div>
 
     
-    <div className="flex-1 max-h-[66vh] overflow-y-auto no-scrollbar p-4 space-y-3">
+    <div className="flex-1 max-h-[66vh] bg-[#F5F7FA] overflow-y-auto no-scrollbar p-4 space-y-3">
       {messages.map((msg) => (
-        <div key={msg.id} className={`flex ${msg.senderId === buyerId ? "justify-end" : "justify-start"}`}>
-          <div className={`p-3 rounded-lg max-w-xs ${msg.senderId === buyerId ? "bg-green-400 text-white" : "bg-gray-200 text-black"}`}>
+        <div key={msg.id} className={`  flex ${msg.senderId === buyerId ? "justify-end" : "justify-start"}`}>
+          <div className={` p-3 rounded-lg max-w-xs ${msg.senderId === buyerId ? "bg-[#DCFCE7] text-black"  : "bg-[#E0E7FF] text-black"}`}>
            {
-            msg.senderId===buyerId?<h1 className="text-md text-left">{buyerName} (buyer)</h1>:<h1 className="text-sm  text-left text-blue-600"><FaUserCircle className="text-gray-500" size={25} /></h1>
+            msg.senderId===buyerId?
+            <h1 className="text-md text-[#047857] text-left capitalize">{buyerName} (buyer)</h1>
+            :
+            
+            <h1 className="text-md text-[#047857] text-left capitalize">{kitchenName} (vendor)</h1>
+              
+              
            } 
-            <p className="text-gray-700">{msg.text}</p>
+            <p className="capitalize ">{msg.text}</p>
+            <p className="text-[#475569] text-right ca">
+            {msg.timeStamp.toDate().toLocaleTimeString('en-IN', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true, 
+  })}
+            </p>
           </div>
         </div>
       ))}
@@ -113,7 +126,7 @@ finally
     <div className="p-2  mx-1  flex items-center  gap-2 rounded-lg border-2 border-black">
       <input
         type="text"
-        className="flex-1   text-gray-700  focus:outline-none"
+        className="flex-1 bg-[#FFFFFF]  text-gray-700  focus:outline-none"
         placeholder="Type your message..."
         value={newMessage}
         onChange={(e) => setNewMessage(e.target.value)}

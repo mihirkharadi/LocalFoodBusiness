@@ -70,6 +70,7 @@ const handleLogin=async()=>
             }
           )
   }
+  setLoading(false);
 }
 
 const handleForgot=async()=>
@@ -91,6 +92,7 @@ if(!email)
       position:"top-right",
 
     })
+   
   }
 }
 
@@ -127,21 +129,42 @@ const handleGoogle=async()=>
       // * if role not present then toast msg for selection
 
       toast.info(
-        <div>
+        <div className="">
 
-            <p>Select your role :</p>
+            <p className="text-lg mb-2">Select your role :</p>
             <button className="bg-green-400 px-2 py-1 rounded mr-2"
-                        onClick={()=>saveRole(user,"buyer")}>
+                        onClick={()=>{saveRole(user,"buyer")
+                          toast.dismiss();
+                        }}>
               Buyer
             </button>
             <button className="bg-red-400 px-2 py-1 rounded mr-2"
-                        onClick={()=>saveRole(user,"seller")}>
+                        onClick={()=>{saveRole(user,"seller")
+                          toast.dismiss();
+                        }}>
               Seller
             </button>
 
         </div>,
         {autoClose:false,
-          position:"top-center",
+          closeButton: false,
+position:"top-center",
+          hideProgressBar: true,
+        
+      style:
+      {
+        marginTop:"50px",
+        
+        width: '200px',
+        borderRadius:"10px",
+        padding:"10px",
+        fontSize:"13px",         
+        minHeight: '40px',
+        backgroundColor:"white",
+        color:"black",
+       
+     
+      }
         }
       )
 
@@ -171,17 +194,17 @@ const saveRole=async(user,role)=>
   await setDoc(userRef,{role:role},{merge:true})
 
 
-  toast.success(`Logged in successfully as ${role}`, {
+  toast.success(`Logged in successfully as ${user}`, {
     position: "top-right",
     autoClose: 2000,
   });
 
-  navigate(role === "seller" ? "/sellerDashboard" : "/profile");
+  navigate(role === "seller" ? "/sellerDashboard" : "/buyerDashboard");
 }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-sm p-6 rounded-lg shadow-lg bg-white">
+    <div className="flex items-center justify-center min-h-screen bg-[#FFA500]">
+      <div className="w-full mx-2  max-w-sm p-6 rounded-lg shadow-lg bg-white">
         <h2 className="text-2xl font-bold text-center">Login</h2>
         <p className="text-center text-gray-500 mb-4">Welcome back to FoodHub</p>
         <div className="space-y-4">

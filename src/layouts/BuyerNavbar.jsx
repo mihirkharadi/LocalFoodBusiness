@@ -33,20 +33,22 @@ const BuyerNavbar = () => {
     {
       navigate('/menu');
     }
-    const handleFeedback=()=>
+    
+
+    const handleFav=()=>
     {
-      navigate('/feedback')
+      navigate('/fav')
     }
   return (
     <>
-    <div className={`fixed inset-0 bg-opacity-50 z-1000 ${sidebarOpen ? "block" : "hidden"} dark:bg-gray-700`} onClick={() => setSidebarOpen(false)}></div>
+    <div className={`fixed top-0 left-0 right-0 bg-opacity-50 z-1000 ${sidebarOpen ? "block" : "hidden"} dark:bg-gray-700`} onClick={() => setSidebarOpen(false)}></div>
 <div className={`fixed left-0 top-0 h-full w-64 shadow-md z-1000 bg-white dark:bg-gray-800 transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} transition-transform`}>
   <div className="p-4 flex justify-between items-center border-b">
     <h2 className="text-lg font-bold text-gray-900 dark:text-white">Menu</h2>
     <FiX className="text-xl cursor-pointer text-gray-900 dark:text-white" onClick={() => setSidebarOpen(false)} />
   </div>
   <ul className="p-4 space-y-4">
-    <li onClick={handleFeedback} className="cursor-pointer text-gray-900 dark:text-white hover:text-yellow-300 dark:hover:text-yellow-300 transition">Feedback</li>
+    
     <li onClick={handleMenu} className="cursor-pointer text-gray-900 dark:text-white hover:text-yellow-300 dark:hover:text-yellow-300 transition">Menu</li>
     <li onClick={handleLogout} className="cursor-pointer text-gray-900 dark:text-white hover:text-yellow-300 dark:hover:text-yellow-300 transition">Logout</li>
     <li className="cursor-pointer text-gray-900 dark:text-white hover:text-yellow-300 dark:hover:text-yellow-300 transition">Delete Account</li>
@@ -61,7 +63,7 @@ const BuyerNavbar = () => {
   <h1 className="font-bold text-lg text-gray-700 dark:text-white">FoodY</h1>
   <div className="flex gap-2">
   
-    <FiHeart className="text-xl text-gray-600 dark:text-white " />
+    <FiHeart onClick={handleFav} className="text-xl text-gray-600 cursor-pointer dark:text-white " />
   </div>
 </nav>
     

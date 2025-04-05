@@ -75,109 +75,98 @@ const SignupForm = () => {
   };
 
   return (
-    <div className="grid place-items-center">
-      <div className="w-[350px] h-[550px] bg-black rounded-3xl shadow-2xl border-8 border-black relative overflow-hidden">
-     
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-5 bg-black rounded-b-3xl"></div>
-
+    <div className="flex items-center justify-center min-h-screen bg-[#FFA500] px-4">
+    <div className="w-full max-w-sm p-6 rounded-lg shadow-lg bg-white">
+      <h2 className="text-2xl font-bold text-center">Create Account</h2>
+      <p className="text-center text-gray-500 mb-4">
+        Join FoodHub to start ordering or selling delicious meals
+      </p>
   
-        <div className="relative h-full w-full bg-white rounded-3xl overflow-hidden flex flex-col justify-center p-6">
-      
-          <h2 className="text-2xl font-bold text-center">Create Account</h2>
-          <p className="text-gray-500 text-center mt-1">
-            Join FoodHub to start ordering or selling delicious meals
-          </p>
-
-          <form className="mt-4 space-y-4">
-
+      <form className="space-y-4">
+        <input
+          type="text"
+          name="fullName"
+          placeholder="Full Name"
+          required
+          onChange={handleChange}
+          value={data.fullName}
+          className="w-full px-4 py-2 border border-gray-300 rounded"
+        />
+  
+        <input
+          type="email"
+          name="email"
+          placeholder="Email Address"
+          required
+          value={data.email}
+          onChange={handleChange}
+          className="w-full px-4 py-2 border border-gray-300 rounded"
+        />
+  
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+          onChange={handleChange}
+          value={data.password}
+          className="w-full px-4 py-2 border border-gray-300 rounded"
+        />
+  
+        {/* Role Selection */}
+        <div className="flex items-center space-x-4 text-sm">
+          <label className="flex items-center space-x-2">
             <input
-              type="text"
-              name="fullName"
-              id="fullName"
-              required
-              placeholder="Full Name"
+              type="radio"
+              name="role"
+              value="buyer"
               onChange={handleChange}
-              value={data.fullName}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="accent-blue-500"
             />
+            <span>Buyer</span>
+          </label>
+          <label className="flex items-center space-x-2">
             <input
-              type="email"
-              name="email"
-              required
-              value={data.email}
+              type="radio"
+              name="role"
+              value="seller"
               onChange={handleChange}
-              placeholder="Email Address"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="accent-blue-500"
             />
-            <input
-              type="password"
-              name="password"
-              required
-              onChange={handleChange}
-              value={data.password}
-              placeholder="Password"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-
-          
-            <div className="flex items-center space-x-4">
-              <label className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="role"
-                  value="buyer"
-                  
-                  
-                  onChange={handleChange}
-                  className="accent-blue-500"
-                />
-                <span>Buyer</span>
-              </label>
-              <label className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="role"
-                  value="seller"
-                 
-                  onChange={handleChange}
-                  className="accent-blue-500"
-                />
-                <span>Seller</span>
-              </label>
-            </div>
-
-           
-            <div className="flex items-start space-x-2">
-              <input
-                type="checkbox"
-                checked={agree}
-                required
-            
-                onChange={() => setAgree(!agree)}
-                className="accent-blue-500"
-              />
-              <p className="text-sm text-gray-600">
-                I agree to the{" "}
-                <span className="font-semibold text-black">
-                  Terms & Conditions
-                </span>{" "}
-                and{" "}
-                <span className="font-semibold text-black">Privacy Policy</span>
-              </p>
-            </div>
-
-           
-            <button
-            
-              onClick={handleSignup}
-              className="w-full bg-black text-white font-semibold py-3 rounded-lg mt-2 shadow-md hover:opacity-90 transition"
-            >
-              Sign Up
-            </button>
-          </form>
+            <span>Seller</span>
+          </label>
         </div>
-      </div>
+  
+        {/* Terms and Conditions */}
+        {/* <div className="flex items-start space-x-2 text-sm">
+          <input
+            type="checkbox"
+            checked={agree}
+            onChange={() => setAgree(!agree)}
+            required
+            className="accent-blue-500 mt-1"
+          />
+          <p className="text-gray-600">
+            I agree to the{" "}
+            <span className="font-semibold text-black">
+              Terms & Conditions
+            </span>{" "}
+            and{" "}
+            <span className="font-semibold text-black">Privacy Policy</span>
+          </p>
+        </div> */}
+  
+        {/* Submit Button */}
+        <button
+          onClick={handleSignup}
+          className="w-full bg-black text-white p-2 rounded hover:opacity-90 transition"
+        >
+          Sign Up
+        </button>
+      </form>
     </div>
+  </div>
+  
   );
 };
 
