@@ -6,14 +6,15 @@ import {getFirestore} from 'firebase/firestore';
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCiz1L6UYidyt9kH_HHkiodBylwAXUn8z4",
-  authDomain: "foodbusiness-5c989.firebaseapp.com",
-  projectId: "foodbusiness-5c989",
-  storageBucket: "foodbusiness-5c989.firebasestorage.app",
-  messagingSenderId: "731165682284",
-  appId: "1:731165682284:web:20e5926ddeee2b0c628649",
-  measurementId: "G-NDJ5VMH9RV"
+  apiKey: import.meta.env.VITE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID,
+  measurementId: import.meta.env.VITE_MEASUREMENT_ID
 };
+
 
 
 

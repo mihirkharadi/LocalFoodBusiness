@@ -20,7 +20,7 @@ const handleSignUp=()=>
     {/* Image Section */}
     <div className="w-full h-[50vh] md:h-screen md:w-1/2">
       <img
-        src="src/assets/burger.jpg"
+        src="burger.jpg"
         alt="Burger"
         className="w-full h-full object-fit"
       />
