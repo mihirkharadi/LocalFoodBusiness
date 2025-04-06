@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 const SignupForm = () => {
 
   
-  const [agree, setAgree] = useState(false);
+ 
   const[data,setData]=useState(
     {
       email:"",
@@ -37,9 +37,7 @@ const SignupForm = () => {
         style:{width:"200px",height:"50px",fontSize:"12px"}});
 
 
-      if (!agree) return toast.error("You must agree to the Terms & Conditions", { position: "top-left",
-        autoClose:2000 ,
-        style:{width:"200px",height:"50px",fontSize:"12px"}});
+      
       const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
       const token = await userCredential.user.getIdToken(); 
         const user=auth.currentUser;

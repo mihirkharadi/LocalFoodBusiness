@@ -93,10 +93,12 @@ const handleChat=async(kitchenId,buyerId,buyerName,kitchenName)=>
     
     
       //  check for chat ref have buyer in array
-      const q=query(chatRef,where("users","array-contains",kitchenId));
+      const q=query(chatRef,where("users","array-contains",buyerId));
+  ;
     
       const existingChats=await getDocs(q);
     
+      
     
       let chatExists=false;
       let existingChatId=null;
@@ -105,7 +107,7 @@ const handleChat=async(kitchenId,buyerId,buyerName,kitchenName)=>
       {
         const data=doc.data();
     
-        if(data.users.includes(buyerId))
+        if(data.users.includes(kitchenId))
         {
           chatExists=true;
           existingChatId=doc.id;
