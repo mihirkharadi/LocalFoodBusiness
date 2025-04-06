@@ -65,7 +65,7 @@ export default function Orders() {
       where("paymentStatus", "==", "Done"),
       where("kitchenName", "==", kitchensData),
       where("OrderStatus", "!=", "Delivered"),
-      orderBy("timestamp", "desc"),
+      orderBy("createdAt", "desc"),
       ...(lastVisible && loadMore ? [startAfter(lastVisible)] : []),
       limit(pageSize)
     );
