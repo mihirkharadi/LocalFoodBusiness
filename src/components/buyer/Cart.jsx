@@ -231,7 +231,7 @@ const navigate=useNavigate();
           "Content-Type":"application/json"
         }
     
-        const response=await fetch("http://localhost:3000/api/checkout",
+        const response=await fetch("https://food-backend-beta.vercel.app/api/checkout",
           {
             method:"POST",
             headers:headers,

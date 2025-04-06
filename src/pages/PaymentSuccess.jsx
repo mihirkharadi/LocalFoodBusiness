@@ -14,14 +14,15 @@ const navigate=useNavigate();
  
 useEffect(() => {
   const handleSuccess = async () => {
-    const userId=auth.currentUser?.uid;
+    const userId=localStorage.getItem("auth");
+console.log(userId);
 
     const cartRef = collection(db, "users", userId, "cart");
     const cartSnap = await getDocs(cartRef);
     cartSnap.forEach((doc) => deleteDoc(doc.ref));
 
     
-    navigate("/order");
+    
   };
 
   handleSuccess();
