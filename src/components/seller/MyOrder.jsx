@@ -28,8 +28,10 @@ export default function Orders() {
   const [loader, setLoader] = useState(false);
   const [isDispatch, setIsDispatch] = useState(false);
   const [chatId, setChatId] = useState({ chatId: "" });
+  const [prevStack, setPrevStack] = useState([]); 
   const [lastVisible, setLastVisible] = useState(null);
   const [hasMore, setHasMore] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const navigate = useNavigate();
   const userId = auth.currentUser?.uid;
@@ -54,36 +56,43 @@ export default function Orders() {
     if (kitchensData) fetchOrders();
   }, [kitchensData]);
 
-  const fetchOrders = async (loadMore = false) => {
+  const fetchOrders = async (direction = "next") => {
     if (!userId || !kitchensData) return;
     setLoader(true);
-
+  
     let pageSize = window.innerWidth < 768 ? 1 : 5;
-
+  
     const baseQuery = query(
       collection(db, "order"),
       where("paymentStatus", "==", "Done"),
       where("kitchenName", "==", kitchensData),
       where("OrderStatus", "!=", "Delivered"),
       orderBy("createdAt", "desc"),
-      ...(lastVisible && loadMore ? [startAfter(lastVisible)] : []),
+      ...(direction === "next" && lastVisible ? [startAfter(lastVisible)] : []),
       limit(pageSize)
     );
-
+  
     const snapshot = await getDocs(baseQuery);
     const newOrders = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data(), docId: doc.id }));
     const newLastVisible = snapshot.docs[snapshot.docs.length - 1];
-
-    if (loadMore) {
-      setCartItems((prev) => [...prev, ...newOrders]);
-    } else {
-      setCartItems(newOrders);
+  
+    if (direction === "next" && lastVisible) {
+      setPrevStack((prev) => [...prev, lastVisible]);
+    } else if (direction === "prev") {
+      const newStack = [...prevStack];
+      const previous = newStack.pop();
+      setPrevStack(newStack);
+      setLastVisible(previous);
+      return fetchOrders("next");
     }
-
+  
+    setCartItems(newOrders);
     setLastVisible(newLastVisible);
     setHasMore(snapshot.docs.length === pageSize);
+    setCurrentIndex(0); 
     setLoader(false);
   };
+  
 
   const handleStatus = async (orderId, newStatus) => {
     try {
@@ -153,7 +162,7 @@ export default function Orders() {
             <Loading />
           ) : (
             <>
-              <h1 className="text-lg text-white text-center">Total Orders: {cartItems.length}</h1>
+              
               <div className="flex gap-3 mx-3 flex-wrap justify-evenly items-center overflow-y-auto max-h-[70vh]">
                 {cartItems.map((order) => (
                   <div
@@ -249,14 +258,23 @@ export default function Orders() {
                 ))}
               </div>
               {hasMore && (
-                <div className="flex justify-center mt-4">
-                  <button
-                    onClick={() => fetchOrders(true)}
-                    className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition"
-                  >
-                    Load More
-                  </button>
-                </div>
+                <div className="flex justify-center gap-4 mt-4">
+                <button
+                  onClick={() => fetchOrders("prev")}
+                  disabled={prevStack.length === 0}
+                  className="bg-white text-black py-1 px-3 rounded disabled:opacity-50"
+                >
+                  ← Prev
+                </button>
+                <button
+                  onClick={() => fetchOrders("next")}
+                  disabled={!hasMore}
+                  className="bg-white text-black py-1 px-3 rounded disabled:opacity-50"
+                >
+                  Next →
+                </button>
+              </div>
+              
               )}
             </>
           )}
