@@ -28,8 +28,7 @@ const [selectedOrder, setSelectedOrder] = useState(null);
     
         const cartRef = collection(db, "order");
 
-        const today = new Date().toISOString().split("T")[0];
-        console.log(today);
+        
         
         const unsubscribe = onSnapshot(cartRef, (snapshot) => {
           const cartData = snapshot.docs.map((doc) => ({
@@ -50,6 +49,13 @@ const [selectedOrder, setSelectedOrder] = useState(null);
       const handleChat=async(kitchenId,buyerId,kitchenName,buyerName)=>
       {
       
+       console.log(kitchenId);
+       console.log(buyerId);
+       console.log(kitchenName);
+       console.log(buyerName);
+       
+       
+       
        
           
             // get ref of chats collection
@@ -81,12 +87,13 @@ const [selectedOrder, setSelectedOrder] = useState(null);
             {
               const newChat= await addDoc(chatRef,
                 {
-                  users:[buyerId,kitchenId],
-                  lastMessage:"",
-                  lastMessageTimeStamp:null,
+                  users:[kitchenId,buyerId],
+                  
                 }
               )
               finalChatId = newChat.id; 
+            
+              
             }
               setChatId({chatId:finalChatId})
             
@@ -165,7 +172,7 @@ const [selectedOrder, setSelectedOrder] = useState(null);
 <>
 
         <BuyerNavbar/>
-        <div  className="  bg-blue-200 min-h-[90vh]  overflow-y-auto no-scrollbar ">
+        <div  className="  bg-gray-100 min-h-[90vh]  overflow-y-auto no-scrollbar ">
             <h1 className="text-2xl font-bold text-center mb-4">My Orders</h1>
             <p className="text-center text-gray-500 mb-6">Track your recent orders</p>
             <div className="max-w-md mx-auto ">
@@ -208,10 +215,11 @@ const [selectedOrder, setSelectedOrder] = useState(null);
                   </div>
                 </div>
               </div>:
+              cartItems.length>0?
               cartItems.map(order => (
                     
-                <div className="bg-blue-50 shadow-lg rounded-lg p-4 my-2 mx-2 flex justify-between items-center">
-                <div  key={order.id}>
+                <div key={order.orderRefId} className="bg-blue-50 shadow-lg rounded-lg p-4 my-2 mx-2 flex justify-between items-center">
+                <div  >
                     <h2 className="text-md font-semibold text-black "> {order.orderRefId}</h2>
                    
                    <p className='text-sm '>Vendor: 
@@ -229,7 +237,7 @@ const [selectedOrder, setSelectedOrder] = useState(null);
                     <span className={`text-xs font-bold py-1 px-2 rounded-md ${order.status === 'Delivered' ? 'bg-green-100 text-green-600' : 'bg-yellow-100 text-yellow-600'}`}>
                         {order.OrderStatus}
                     </span>
-                    <p className="text-md font-bold mt-1 text-green-400"> ₹{order.ItemsDetails[1].total}</p>
+                    <p className="text-md font-bold mt-1 text-green-400"> ₹{order.ItemsDetails[0].total}</p>
                     {
                      order.OrderStatus==="Delivered"?<button onClick={()=>handleRating(order.kitchenId,order.docId,order.kitchenName,order.CustomerDetails.username)} className="w-full text-center mt-2 cursor-pointer bg-purple-600 text-white text-sm py-2 px-1 rounded-lg hover:bg-blue-700 transition">
                      ★ Rate your order now 
@@ -240,7 +248,19 @@ const [selectedOrder, setSelectedOrder] = useState(null);
                     
                 </div>
             </div>
-             ))}
+            ))
+            :
+            <div className="bg-blue-50 shadow-lg rounded-lg p-4 my-2 mx-2 flex justify-between items-center">
+               <h1>No order placed</h1>
+                    
+               </div>
+                  
+                     }
+                    
+                  
+                
+           
+             
               
                 
                

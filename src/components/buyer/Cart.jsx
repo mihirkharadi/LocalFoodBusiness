@@ -200,6 +200,7 @@ const navigate=useNavigate();
          
         }))
         const kitchenName=cartItems.map((cur)=>cur.kitchenName)
+        const kitchenId=cartItems.map((cur)=>cur.kitchenId)
         const orderRef=await addDoc(collection(db, "order"), {
           orderRefId,
           CustomerDetails: { ...deliveryData },
@@ -210,6 +211,7 @@ const navigate=useNavigate();
           createdAt: new Date(), 
           id:userId||"",
           kitchenName:kitchenName[0],
+          kitchenId:kitchenId[0],
           
         });
       await updateDoc(orderRef,{docId:orderRef.id});
@@ -255,6 +257,55 @@ const navigate=useNavigate();
     
         
         }
+
+        else {
+          try {
+            const orderRefId = `ORD-${new Date().getTime()}`;
+        
+            const raw = cartItems.map((cur) => ({
+              itemName: cur.itemName,
+              price: cur.price,
+              quantity: cur.quantity,
+              total: totals.total,
+            }));
+            const kitchenName = cartItems.map((cur) => cur.kitchenName);
+            const kitchenId = cartItems.map((cur) => cur.kitchenId);
+        
+            const orderRef = await addDoc(collection(db, "order"), {
+              orderRefId,
+              CustomerDetails: { ...deliveryData },
+              ItemsDetails: raw || [],
+              paymentMethod: payment,
+              paymentStatus: "Pending",
+              OrderStatus: "Pending",
+              createdAt: new Date(),
+              id: userId || "",
+              kitchenName: kitchenName[0],
+              kitchenId: kitchenId[0],
+            });
+        
+            await updateDoc(orderRef, { docId: orderRef.id });
+        
+           
+            const cartRef = collection(db, "users", userId, "cart");
+            const snapshot = await getDocs(cartRef);
+            snapshot.forEach((doc) => deleteDoc(doc.ref));
+        
+            toast.success("Order placed successfully!", {
+              position: "top-center",
+              autoClose: 1000,
+            });
+        
+            navigate("/order"); 
+          } catch (error) {
+            toast.error(`Failed to place COD order: ${error.message}`, {
+              position: "top-center",
+              autoClose: 1000,
+            });
+            console.error("COD Order Error: ", error);
+          }
+        }
+        
 
     
      

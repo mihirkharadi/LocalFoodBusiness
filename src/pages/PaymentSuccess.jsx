@@ -1,15 +1,34 @@
 import BuyerFooter from '../layouts/BuyerFooter';
 import BuyerNavbar from '../layouts/BuyerNavbar';
 import { useLocation } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
+import { db } from '../firebaseConfig';
+import { collection,getDocs,deleteDoc, } from 'firebase/firestore';
+import { useEffect } from 'react';
+import { auth } from '../firebaseConfig';
 const PaymentSuccess = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const orderId = searchParams.get("orderId");
-
+const navigate=useNavigate();
  
+useEffect(() => {
+  const handleSuccess = async () => {
+    const userId=auth.currentUser?.uid;
+
+    const cartRef = collection(db, "users", userId, "cart");
+    const cartSnap = await getDocs(cartRef);
+    cartSnap.forEach((doc) => deleteDoc(doc.ref));
+
+    
+    navigate("/order");
+  };
+
+  handleSuccess();
+}, []);
 
   return (
+    
     <>
   <BuyerNavbar/>
     
@@ -21,7 +40,7 @@ const PaymentSuccess = () => {
         className="mt-4 px-4 py-2 bg-black text-white rounded-xl hover:bg-gray-800"
         onClick={() => navigate("/order")}
       >
-        Return to Cart
+        Go to order
       </button>
     </div>
 <BuyerFooter/>
