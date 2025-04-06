@@ -2,9 +2,12 @@
 import BuyerNavbar from "../../layouts/BuyerNavbar";
 import Map from './Map'
 import BuyerFooter from '../../layouts/BuyerFooter'
+import { auth } from "../../firebaseConfig";
 
 
 const  BuyerDashboard=()=> {
+
+
   
   return (
     <div className="bg-white min-h-screen">

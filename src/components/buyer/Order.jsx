@@ -22,42 +22,30 @@ const [selectedOrder, setSelectedOrder] = useState(null);
     const navigate=useNavigate();
 
     useEffect(() => {
-       
-        
-        
+      if (!userId) return; 
     
-        const cartRef = collection(db, "order");
-
-        
-        
-        const unsubscribe = onSnapshot(cartRef, (snapshot) => {
-          const cartData = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          })).filter((cur)=>(cur.paymentStatus==="Done" && cur.id===userId ));
-
-         
-          setCartItems(cartData);
-        
-         
-          
-        });
+      const cartRef = collection(db, "order");
     
-        return () => unsubscribe();
-      }, [userId]);
+      const q = query(
+        cartRef,
+        where("id", "==", userId),
+        where("paymentStatus", "==", "Done")
+      );
+    
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        const cartData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+    
+        setCartItems(cartData);
+      });
+    
+      return () => unsubscribe();
+    }, [userId]);
 
       const handleChat=async(kitchenId,buyerId,kitchenName,buyerName)=>
       {
-      
-       console.log(kitchenId);
-       console.log(buyerId);
-       console.log(kitchenName);
-       console.log(buyerName);
-       
-       
-       
-       
-          
             // get ref of chats collection
             const chatRef=collection(db,"chats");
           
