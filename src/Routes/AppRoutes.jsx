@@ -17,6 +17,8 @@ import OrdersPage from "../components/buyer/Order.jsx";
 import Chat from "../components/seller/Chat.jsx";
 import BuyerChat from "../components/buyer/Chat.jsx";
 import FavMenu from "../components/buyer/Favourite.jsx";
+import PaymentCancel from "../pages/PaymentCancel.jsx";
+import PaymentSuccess from "../pages/PaymentSuccess.jsx"
 export  const AppRoutes=()=>
 {
     return(
@@ -41,6 +43,8 @@ export  const AppRoutes=()=>
             <Route path="/fav" element={<FavMenu/>}/>
             <Route path="/chat/:kitchenId/:buyerId/:chatId/:buyerName/:kitchenName" element={<Chat/>} />
             <Route path="/buyerChat/:kitchenId/:buyerId/:chatId/:buyerName/:kitchenName" element={<BuyerChat/>} />
+            <Route path="/payment-success" element={<PaymentSuccess />} />
+            <Route path="/payment-cancel" element={<PaymentCancel />} />        
         </Routes>
     )
 }
