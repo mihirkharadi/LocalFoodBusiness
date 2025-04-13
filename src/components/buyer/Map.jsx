@@ -65,14 +65,14 @@ const navigate=useNavigate();
      useEffect(() => {
     if (userLocation) {
       const nearby = restaurants.filter((restaurant) =>
-        getDistance(userLocation, [restaurant.latitude, restaurant.longitude]) <= 1
+        getDistance(userLocation, [restaurant.latitude, restaurant.longitude]) <= 10
       );
       setNearbyRestaurants(nearby);
     }
      }, [userLocation, restaurants]);
 
   // Get user's location using browser's geolocation
-   // Get User's Location
+  
    const getUserLocation = async () => {
     try {
       setLoading(true);
@@ -215,7 +215,7 @@ const handleGoToFav=()=>
     <MapContainer 
     
       center={userLocation|| [23.462869 , 73.299939 ]}
-      zoom={10} 
+      
       attributionControl={false}
     
       style={{ height: "200px", width: "100%" }}
@@ -227,7 +227,8 @@ const handleGoToFav=()=>
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution=""
       />
-<DynamicMapCenter center={userLocation} />
+<DynamicMapCenter center={userLocation}
+ />
       {/* User's Location */}
       {userLocation && (
         <>
@@ -262,9 +263,7 @@ const handleGoToFav=()=>
             ⭐ Rating: {restaurant.rating || "N/A"}
           </Popup>
         </Marker>
-         {/* <Marker position={userLocation} >
-         <Popup>🟦 Your Location</Popup>
-        </Marker> */}
+        
 </>
         
       ))}

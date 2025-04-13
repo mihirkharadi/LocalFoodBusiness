@@ -50,7 +50,7 @@ const Navbar = () => {
     <li onClick={handleFeedback} className="cursor-pointer text-gray-900 dark:text-white hover:text-yellow-300 dark:hover:text-yellow-300 transition">Feedback</li>
     <li onClick={handleKitchen} className="cursor-pointer text-gray-900 dark:text-white hover:text-yellow-300 dark:hover:text-yellow-300 transition">HomeChef Service</li>
     <li onClick={handleLogout} className="cursor-pointer text-gray-900 dark:text-white hover:text-yellow-300 dark:hover:text-yellow-300 transition">Logout</li>
-    <li className="cursor-pointer text-gray-900 dark:text-white hover:text-yellow-300 dark:hover:text-yellow-300 transition">Delete Account</li>
+   
     <p className="text-center absolute bottom-2 text-gray-600 dark:text-gray-400 text-sm">© 2025 Foody. All rights reserved.</p>
   </ul>
 </div>
@@ -61,7 +61,7 @@ const Navbar = () => {
   <h1 className="font-bold text-lg text-gray-700 dark:text-white">FoodY</h1>
   <div className="flex gap-2">
     
-    <FiHeart className="text-xl text-gray-600 dark:text-white " />
+   
   </div>
 </nav>
     

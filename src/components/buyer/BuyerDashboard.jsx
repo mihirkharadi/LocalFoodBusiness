@@ -26,7 +26,7 @@ const  BuyerDashboard=()=> {
 
 
 
-      <div className="p-2 z-2 max-h-[60vh] overflow-y-auto no-scrollbar   ">
+      <div className="p-2 z-2    ">
         
         <Map/>
         

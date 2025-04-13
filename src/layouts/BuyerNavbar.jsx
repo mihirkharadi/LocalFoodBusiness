@@ -48,7 +48,7 @@ const BuyerNavbar = () => {
     
 
     <li onClick={handleLogout} className="cursor-pointer text-gray-900 dark:text-white hover:text-yellow-300 dark:hover:text-yellow-300 transition">Logout</li>
-    <li className="cursor-pointer text-gray-900 dark:text-white hover:text-yellow-300 dark:hover:text-yellow-300 transition">Delete Account</li>
+   
     <p className="text-center absolute bottom-2 text-gray-600 dark:text-gray-400 text-sm">© 2025 Foody. All rights reserved.</p>
   </ul>
 </div>
